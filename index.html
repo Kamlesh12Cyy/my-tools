@@ -1,57 +1,138 @@
 
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR Code Generator</title>
+<title>My Online Tools - Free Online Tools</title>
+<meta name="description" content="My Online Tools - Free online QR code generator and useful web tools.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#667eea,#764ba2);
-min-height:100vh;padding:20px;color:#222;
-}
-.container{
-max-width:520px;margin:30px auto;background:white;
-padding:25px;border-radius:20px;
-box-shadow:0 10px 35px #0003;
-}
-h1{text-align:center;color:#6246c7;margin-bottom:10px}
-.subtitle{text-align:center;color:#777;margin-bottom:25px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f6fc;color:#20243a}
+header{background:#fff;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px #0000000d;position:sticky;top:0;z-index:10}
+.logo{font-size:22px;font-weight:800;color:#6546d5}
+.logo span{color:#252b45}
+nav a{text-decoration:none;color:#444;margin-left:20px;font-size:14px}
+.hero{text-align:center;padding:65px 15px 55px;background:linear-gradient(135deg,#6345d5,#8871ed);color:white}
+.hero h1{font-size:36px;margin-bottom:15px}
+.hero p{font-size:16px;line-height:1.6;opacity:.9}
+.search{max-width:480px;margin:25px auto 0;display:flex;background:white;border-radius:12px;padding:6px}
+.search input{flex:1;min-width:0;border:0;outline:0;padding:12px;font-size:15px}
+.search button{border:0;background:#6546d5;color:white;padding:12px 20px;border-radius:9px}
+section{padding:40px 5%;max-width:1150px;margin:auto}
+.heading{text-align:center;margin-bottom:25px}
+.heading h2{font-size:27px;margin-bottom:8px}
+.heading p{color:#777;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tool{background:white;padding:23px;border-radius:15px;border:1px solid #eee;box-shadow:0 5px 20px #22200008;transition:.2s}
+.tool:hover{transform:translateY(-4px);box-shadow:0 9px 25px #00000012}
+.tool .emoji{font-size:32px;margin-bottom:15px}
+.tool h3{font-size:17px;margin-bottom:9px}
+.tool p{font-size:13px;color:#777;line-height:1.5;min-height:38px}
+.tool button{margin-top:17px;width:100%;padding:11px;border:0;border-radius:8px;background:#6546d5;color:white;font-weight:bold;cursor:pointer}
+.tool .soon{background:#eee;color:#777}
+#qrTool{display:none;background:white;border-radius:16px;padding:25px;max-width:650px;margin:0 auto;box-shadow:0 5px 25px #0000000c}
+#qrTool h2{text-align:center;color:#6546d5;margin-bottom:20px}
 label{display:block;font-weight:bold;margin:15px 0 8px}
-input,textarea,select{
-width:100%;padding:13px;border:1px solid #ddd;
-border-radius:10px;font-size:16px;outline:none;
+input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px}
+textarea{min-height:80px}
+.generate,.download{width:100%;padding:14px;border:0;border-radius:9px;background:#6546d5;color:white;font-weight:bold;margin-top:18px;cursor:pointer}
+.download{background:#119b68}
+#qrcode{display:flex;justify-content:center;margin:20px auto;min-height:10px}
+#qrcode img{max-width:100%;height:auto}
+.close{background:#eee;color:#333;border:0;padding:10px 15px;border-radius:8px;cursor:pointer}
+footer{text-align:center;background:#20243a;color:#ddd;padding:30px 15px;margin-top:40px}
+footer p{font-size:13px;line-height:2}
+.empty{text-align:center;color:#888;padding:25px;display:none}
+@media(max-width:700px){
+.grid{grid-template-columns:repeat(2,1fr);gap:12px}
+.tool{padding:16px}
+.hero h1{font-size:29px}
+nav a{margin-left:9px;font-size:12px}
+.logo{font-size:18px}
 }
-textarea{resize:vertical;min-height:90px}
-input:focus,textarea:focus,select:focus{border-color:#7655dc}
-button{
-border:0;padding:14px;border-radius:10px;
-font-size:16px;font-weight:bold;cursor:pointer;
+@media(max-width:400px){
+.grid{grid-template-columns:1fr}
 }
-.generate{width:100%;background:#6847d4;color:white;margin-top:20px}
-.generate:hover{background:#4f32b0}
-.download{background:#16a36a;color:white;width:100%;margin-top:15px}
-#qrArea{
-display:flex;justify-content:center;align-items:center;
-margin-top:25px;min-height:220px;padding:15px;
-border:2px dashed #ddd;border-radius:15px;
-}
-#qrcode{padding:10px;background:white}
-#qrcode img,#qrcode canvas{max-width:100%;height:auto}
-.note{text-align:center;color:#777;font-size:13px;margin-top:18px}
-.colors{display:flex;gap:15px}
-.colors div{flex:1}
-input[type=color]{height:48px;padding:4px}
 </style>
 </head>
 <body>
 
-<div class="container">
-<h1>⚡ QR Code Generator</h1>
-<p class="subtitle">Create your own QR code instantly!</p>
+<header>
+<div class="logo">MY <span>ONLINE TOOLS</span></div>
+<nav>
+<a href="#">Home</a>
+<a href="#tools">Tools</a>
+<a href="#about">About</a>
+</nav>
+</header>
+
+<div class="hero">
+<h1>Free Online Tools</h1>
+<p>All Your Useful Tools in One Place.<br>
+Fast, Simple and Easy to Use!</p>
+<div class="search">
+<input id="search" placeholder="Search your tools..." oninput="searchTools()">
+<button onclick="searchTools()">Search</button>
+</div>
+</div>
+
+<section id="tools">
+<div class="heading">
+<h2>Explore Our Tools</h2>
+<p>Choose a tool and get your work done easily.</p>
+</div>
+
+<div class="grid" id="toolGrid">
+<div class="tool" data-name="qr code generator">
+<div class="emoji">📱</div>
+<h3>QR Code Generator</h3>
+<p>Create QR codes for websites, text, WhatsApp and email.</p>
+<button onclick="openQR()">Open Tool</button>
+</div>
+
+<div class="tool" data-name="image compressor">
+<div class="emoji">🖼️</div>
+<h3>Image Compressor</h3>
+<p>Reduce image file size easily.</p>
+<button class="soon" onclick="coming()">Coming Soon</button>
+</div>
+
+<div class="tool" data-name="pdf tools">
+<div class="emoji">📄</div>
+<h3>PDF Tools</h3>
+<p>Useful PDF tools for your daily work.</p>
+<button class="soon" onclick="coming()">Coming Soon</button>
+</div>
+
+<div class="tool" data-name="ifsc code checker">
+<div class="emoji">🏦</div>
+<h3>IFSC Code Checker</h3>
+<p>Find bank branch information using IFSC.</p>
+<button class="soon" onclick="coming()">Coming Soon</button>
+</div>
+
+<div class="tool" data-name="screen recorder">
+<div class="emoji">🎥</div>
+<h3>Screen Recorder</h3>
+<p>Record your screen directly in the browser.</p>
+<button class="soon" onclick="coming()">Coming Soon</button>
+</div>
+
+<div class="tool" data-name="text tools">
+<div class="emoji">✍️</div>
+<h3>Text Tools</h3>
+<p>Useful text editing and conversion tools.</p>
+<button class="soon" onclick="coming()">Coming Soon</button>
+</div>
+</div>
+<div class="empty" id="empty">No tools found!</div>
+</section>
+
+<section id="qrTool">
+<button class="close" onclick="closeQR()">← Back to Tools</button>
+<h2>⚡ QR Code Generator</h2>
 
 <label>QR Code Type</label>
 <select id="type" onchange="updateFields()">
@@ -59,8 +140,6 @@ input[type=color]{height:48px;padding:4px}
 <option value="text">Plain Text</option>
 <option value="whatsapp">WhatsApp</option>
 <option value="email">Email</option>
-<option value="phone">Phone Number</option>
-<option value="wifi">Wi-Fi</option>
 </select>
 
 <div id="fields"></div>
@@ -70,129 +149,123 @@ input[type=color]{height:48px;padding:4px}
 <option value="200">200 × 200</option>
 <option value="300" selected>300 × 300</option>
 <option value="400">400 × 400</option>
-<option value="500">500 × 500</option>
 </select>
 
-<div class="colors">
-<div>
-<label>QR Color</label>
-<input type="color" id="dark" value="#000000">
-</div>
-<div>
-<label>Background</label>
-<input type="color" id="light" value="#ffffff">
-</div>
-</div>
-
 <button class="generate" onclick="generateQR()">Generate QR Code</button>
-
-<div id="qrArea">
 <div id="qrcode"></div>
-</div>
-
 <button class="download" onclick="downloadQR()">⬇ Download QR Code</button>
-<p class="note">Made with ❤️ | Free QR Generator</p>
+</section>
+
+<section id="about">
+<div class="heading">
+<h2>About My Online Tools</h2>
+<p>My Online Tools is a collection of useful web tools designed to make everyday digital tasks simple and easy.</p>
 </div>
+</section>
+
+<footer>
+<h3>MY ONLINE TOOLS</h3>
+<p>Free Online Tools for Everyone</p>
+<p>© 2026 My Online Tools. All Rights Reserved.</p>
+</footer>
 
 <script>
-const fields=document.getElementById("fields");
+function searchTools(){
+let q=document.getElementById("search").value.toLowerCase();
+let cards=document.querySelectorAll(".tool");
+let count=0;
+cards.forEach(card=>{
+let show=card.dataset.name.includes(q);
+card.style.display=show?"block":"none";
+if(show)count++;
+});
+document.getElementById("empty").style.display=count?"none":"block";
+}
+
+function coming(){
+alert("This tool is coming soon!");
+}
+
+function openQR(){
+document.getElementById("qrTool").style.display="block";
+document.getElementById("tools").style.display="none";
+updateFields();
+window.scrollTo(0,0);
+}
+
+function closeQR(){
+document.getElementById("qrTool").style.display="none";
+document.getElementById("tools").style.display="block";
+window.scrollTo(0,0);
+}
 
 function updateFields(){
-const type=document.getElementById("type").value;
+let type=document.getElementById("type").value;
 let html="";
-
 if(type==="url"){
 html='<label>Website URL</label><input id="value" placeholder="https://example.com">';
 }
-else if(type==="text"){
+if(type==="text"){
 html='<label>Your Text</label><textarea id="value" placeholder="Enter your text"></textarea>';
 }
-else if(type==="whatsapp"){
+if(type==="whatsapp"){
 html='<label>WhatsApp Number (with country code)</label><input id="number" placeholder="919876543210"><label>Message</label><textarea id="message" placeholder="Hello!"></textarea>';
 }
-else if(type==="email"){
+if(type==="email"){
 html='<label>Email Address</label><input id="email" type="email" placeholder="example@gmail.com"><label>Subject</label><input id="subject" placeholder="Subject"><label>Message</label><textarea id="message"></textarea>';
 }
-else if(type==="phone"){
-html='<label>Phone Number</label><input id="value" type="tel" placeholder="+919876543210">';
+document.getElementById("fields").innerHTML=html;
 }
-else if(type==="wifi"){
-html='<label>Wi-Fi Name (SSID)</label><input id="ssid" placeholder="WiFi Name"><label>Password</label><input id="password" placeholder="Password"><label>Security</label><select id="security"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Password</option></select>';
-}
-fields.innerHTML=html;
-}
-updateFields();
 
 function generateQR(){
-const type=document.getElementById("type").value;
-let data="";
-
-if(type==="url" || type==="text" || type==="phone"){
-data=document.getElementById("value").value.trim();
-if(type==="phone") data="tel:"+data;
+if(typeof QRCode==="undefined"){
+alert("QR library load nahi hui. Internet connection check karein.");
+return;
 }
-else if(type==="whatsapp"){
-const number=document.getElementById("number").value.replace(/\D/g,"");
-const message=document.getElementById("message").value;
+let type=document.getElementById("type").value;
+let data="";
+if(type==="url"||type==="text"){
+data=document.getElementById("value").value.trim();
+}
+if(type==="whatsapp"){
+let number=document.getElementById("number").value.replace(/\D/g,"");
+let message=document.getElementById("message").value;
 if(!number){alert("WhatsApp number enter karein");return;}
 data="https://wa.me/"+number+"?text="+encodeURIComponent(message);
 }
-else if(type==="email"){
-const email=document.getElementById("email").value.trim();
-const subject=document.getElementById("subject").value;
-const message=document.getElementById("message").value;
-if(!email){alert("Email address enter karein");return;}
+if(type==="email"){
+let email=document.getElementById("email").value.trim();
+let subject=document.getElementById("subject").value;
+let message=document.getElementById("message").value;
+if(!email){alert("Email enter karein");return;}
 data="mailto:"+email+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(message);
 }
-else if(type==="wifi"){
-const ssid=document.getElementById("ssid").value;
-const password=document.getElementById("password").value;
-const security=document.getElementById("security").value;
-if(!ssid){alert("Wi-Fi name enter karein");return;}
-data="WIFI:T:"+security+";S:"+ssid+";P:"+password+";;";
-}
-
 if(!data){alert("Please enter your information");return;}
 
-const qr=document.getElementById("qrcode");
+let qr=document.getElementById("qrcode");
 qr.innerHTML="";
-
-const size=parseInt(document.getElementById("size").value);
-const dark=document.getElementById("dark").value;
-const light=document.getElementById("light").value;
-
+let size=Number(document.getElementById("size").value);
 new QRCode(qr,{
-text:data,
-width:size,
-height:size,
-colorDark:dark,
-colorLight:light,
+text:data,width:size,height:size,
 correctLevel:QRCode.CorrectLevel.H
 });
 }
 
 function downloadQR(){
-const qr=document.getElementById("qrcode");
-const canvas=qr.querySelector("canvas");
-const img=qr.querySelector("img");
+let qr=document.getElementById("qrcode");
+let canvas=qr.querySelector("canvas");
+let img=qr.querySelector("img");
+let url=canvas?canvas.toDataURL("image/png"):(img?img.src:"");
+if(!url){alert("First generate a QR code!");return;}
+let a=document.createElement("a");
+a.href=url;
+a.download="my-online-tools-qr.png";
+document.body.appendChild(a);
+a.click();
+a.remove();
+}
 
-if(canvas){
-saveImage(canvas.toDataURL("image/png"));
-}else if(img && img.src){
-saveImage(img.src);
-}else{
-alert("Pehle QR Code generate karein");
-}
-}
-
-function saveImage(url){
-const link=document.createElement("a");
-link.href=url;
-link.download="my-qr-code.png";
-document.body.appendChild(link);
-link.click();
-link.remove();
-}
+updateFields();
 </script>
 </body>
 </html>
