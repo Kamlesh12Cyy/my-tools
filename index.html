@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#667eea,#764ba2);
+min-height:100vh;padding:20px;color:#222;
+}
+.container{
+max-width:520px;margin:30px auto;background:white;
+padding:25px;border-radius:20px;
+box-shadow:0 10px 35px #0003;
+}
+h1{text-align:center;color:#6246c7;margin-bottom:10px}
+.subtitle{text-align:center;color:#777;margin-bottom:25px}
+label{display:block;font-weight:bold;margin:15px 0 8px}
+input,textarea,select{
+width:100%;padding:13px;border:1px solid #ddd;
+border-radius:10px;font-size:16px;outline:none;
+}
+textarea{resize:vertical;min-height:90px}
+input:focus,textarea:focus,select:focus{border-color:#7655dc}
+button{
+border:0;padding:14px;border-radius:10px;
+font-size:16px;font-weight:bold;cursor:pointer;
+}
+.generate{width:100%;background:#6847d4;color:white;margin-top:20px}
+.generate:hover{background:#4f32b0}
+.download{background:#16a36a;color:white;width:100%;margin-top:15px}
+#qrArea{
+display:flex;justify-content:center;align-items:center;
+margin-top:25px;min-height:220px;padding:15px;
+border:2px dashed #ddd;border-radius:15px;
+}
+#qrcode{padding:10px;background:white}
+#qrcode img,#qrcode canvas{max-width:100%;height:auto}
+.note{text-align:center;color:#777;font-size:13px;margin-top:18px}
+.colors{display:flex;gap:15px}
+.colors div{flex:1}
+input[type=color]{height:48px;padding:4px}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>⚡ QR Code Generator</h1>
+<p class="subtitle">Create your own QR code instantly!</p>
+
+<label>QR Code Type</label>
+<select id="type" onchange="updateFields()">
+<option value="url">Website URL</option>
+<option value="text">Plain Text</option>
+<option value="whatsapp">WhatsApp</option>
+<option value="email">Email</option>
+<option value="phone">Phone Number</option>
+<option value="wifi">Wi-Fi</option>
+</select>
+
+<div id="fields"></div>
+
+<label>QR Code Size</label>
+<select id="size">
+<option value="200">200 × 200</option>
+<option value="300" selected>300 × 300</option>
+<option value="400">400 × 400</option>
+<option value="500">500 × 500</option>
+</select>
+
+<div class="colors">
+<div>
+<label>QR Color</label>
+<input type="color" id="dark" value="#000000">
+</div>
+<div>
+<label>Background</label>
+<input type="color" id="light" value="#ffffff">
+</div>
+</div>
+
+<button class="generate" onclick="generateQR()">Generate QR Code</button>
+
+<div id="qrArea">
+<div id="qrcode"></div>
+</div>
+
+<button class="download" onclick="downloadQR()">⬇ Download QR Code</button>
+<p class="note">Made with ❤️ | Free QR Generator</p>
+</div>
+
+<script>
+const fields=document.getElementById("fields");
+
+function updateFields(){
+const type=document.getElementById("type").value;
+let html="";
+
+if(type==="url"){
+html='<label>Website URL</label><input id="value" placeholder="https://example.com">';
+}
+else if(type==="text"){
+html='<label>Your Text</label><textarea id="value" placeholder="Enter your text"></textarea>';
+}
+else if(type==="whatsapp"){
+html='<label>WhatsApp Number (with country code)</label><input id="number" placeholder="919876543210"><label>Message</label><textarea id="message" placeholder="Hello!"></textarea>';
+}
+else if(type==="email"){
+html='<label>Email Address</label><input id="email" type="email" placeholder="example@gmail.com"><label>Subject</label><input id="subject" placeholder="Subject"><label>Message</label><textarea id="message"></textarea>';
+}
+else if(type==="phone"){
+html='<label>Phone Number</label><input id="value" type="tel" placeholder="+919876543210">';
+}
+else if(type==="wifi"){
+html='<label>Wi-Fi Name (SSID)</label><input id="ssid" placeholder="WiFi Name"><label>Password</label><input id="password" placeholder="Password"><label>Security</label><select id="security"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Password</option></select>';
+}
+fields.innerHTML=html;
+}
+updateFields();
+
+function generateQR(){
+const type=document.getElementById("type").value;
+let data="";
+
+if(type==="url" || type==="text" || type==="phone"){
+data=document.getElementById("value").value.trim();
+if(type==="phone") data="tel:"+data;
+}
+else if(type==="whatsapp"){
+const number=document.getElementById("number").value.replace(/\D/g,"");
+const message=document.getElementById("message").value;
+if(!number){alert("WhatsApp number enter karein");return;}
+data="https://wa.me/"+number+"?text="+encodeURIComponent(message);
+}
+else if(type==="email"){
+const email=document.getElementById("email").value.trim();
+const subject=document.getElementById("subject").value;
+const message=document.getElementById("message").value;
+if(!email){alert("Email address enter karein");return;}
+data="mailto:"+email+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(message);
+}
+else if(type==="wifi"){
+const ssid=document.getElementById("ssid").value;
+const password=document.getElementById("password").value;
+const security=document.getElementById("security").value;
+if(!ssid){alert("Wi-Fi name enter karein");return;}
+data="WIFI:T:"+security+";S:"+ssid+";P:"+password+";;";
+}
+
+if(!data){alert("Please enter your information");return;}
+
+const qr=document.getElementById("qrcode");
+qr.innerHTML="";
+
+const size=parseInt(document.getElementById("size").value);
+const dark=document.getElementById("dark").value;
+const light=document.getElementById("light").value;
+
+new QRCode(qr,{
+text:data,
+width:size,
+height:size,
+colorDark:dark,
+colorLight:light,
+correctLevel:QRCode.CorrectLevel.H
+});
+}
+
+function downloadQR(){
+const qr=document.getElementById("qrcode");
+const canvas=qr.querySelector("canvas");
+const img=qr.querySelector("img");
+
+if(canvas){
+saveImage(canvas.toDataURL("image/png"));
+}else if(img && img.src){
+saveImage(img.src);
+}else{
+alert("Pehle QR Code generate karein");
+}
+}
+
+function saveImage(url){
+const link=document.createElement("a");
+link.href=url;
+link.download="my-qr-code.png";
+document.body.appendChild(link);
+link.click();
+link.remove();
+}
+</script>
+</body>
+</html>
